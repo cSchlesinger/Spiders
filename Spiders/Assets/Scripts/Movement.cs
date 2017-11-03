@@ -9,10 +9,11 @@ public class Movement : MonoBehaviour
     private Rigidbody2D rBody;
     private Vector3 velocity = new Vector3(2.0f, 0.0f, 0.0f);
 	public float speed = 0.0f;
-	private float maxSpeed = 10.0f;
+	private float maxSpeed = 7.0f;
 	private float slowDown = .1f;
-	private float speedIncrement = 9.0f;
-
+	private float speedIncrement = 14f;
+    private float timeSinceDirectionChange;
+    public bool faceForward = true;
 	private Vector3 worldSize = new Vector3(10.0f, 10.0f, 0.0f);
 
 	private bool useSlowdown = false;
@@ -57,19 +58,20 @@ public class Movement : MonoBehaviour
             //Is it moving or slowing down?
             if (Input.GetKey(KeyCode.D))
             {
-                if (Input.GetKey(KeyCode.A))
+                if (Input.GetKey(KeyCode.A) && !jumping)
                 {
                     speed = 0;
                 }
                 else
-                {
+                {                    
                     speed += speedIncrement * Time.deltaTime;
                 }
+                faceForward = true;
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
             }
             else if (Input.GetKey(KeyCode.A))
             {
-                if (Input.GetKey(KeyCode.D))
+                if (Input.GetKey(KeyCode.D) && !jumping)
                 {
                     speed = 0;
                 }
@@ -77,9 +79,10 @@ public class Movement : MonoBehaviour
                 {
                     speed -= speedIncrement * Time.deltaTime;
                 }
+                faceForward = false;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
             }
-            else
+            else if(!jumping)
             {
                 speed = 0.0f;
             }

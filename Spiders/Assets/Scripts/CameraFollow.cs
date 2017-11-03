@@ -12,7 +12,10 @@ namespace UnityStandardAssets._2D
         public float ySmooth = 8f; // How smoothly the camera catches up with it's target movement in the y axis.
         public Vector2 maxXAndY; // The maximum x and y coordinates the camera can have.
         public Vector2 minXAndY; // The minimum x and y coordinates the camera can have.
-
+        private float offset;
+        public float cameraOffsetValue = .1f;
+        public Movement moveBoy;
+        public bool faceForward = true;
         private Transform m_Player; // Reference to the player's transform.
 
 
@@ -20,6 +23,7 @@ namespace UnityStandardAssets._2D
         {
             // Setting up the reference.
             m_Player = GameObject.FindGameObjectWithTag("Player").transform;
+            moveBoy = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         }
 
 
@@ -39,6 +43,12 @@ namespace UnityStandardAssets._2D
 
         private void Update()
         {
+            /*
+            float targetX = m_Player.position.x;
+            float targetY = m_Player.position.y;
+
+            gameObject.GetComponent<Camera>().transform.position = new Vector3(targetX,targetY, -10);
+            */
             TrackPlayer();
         }
 
@@ -52,8 +62,16 @@ namespace UnityStandardAssets._2D
             // If the player has moved beyond the x margin...
             if (CheckXMargin())
             {
+                if (moveBoy.faceForward)
+                {
+                    offset = cameraOffsetValue;
+                }
+                else
+                {
+                    offset = -cameraOffsetValue;
+                }
                 // ... the target x coordinate should be a Lerp between the camera's current x position and the player's current x position.
-                targetX = Mathf.Lerp(transform.position.x, m_Player.position.x, xSmooth*Time.deltaTime);
+                targetX = Mathf.Lerp(transform.position.x, m_Player.position.x + offset, xSmooth*Time.deltaTime);
             }
 
             // If the player has moved beyond the y margin...
@@ -63,11 +81,20 @@ namespace UnityStandardAssets._2D
                 targetY = Mathf.Lerp(transform.position.y, m_Player.position.y, ySmooth*Time.deltaTime);
             }
 
+            if (moveBoy.faceForward)
+            {
+                offset = cameraOffsetValue;
+            }
+            else
+            {
+                offset = -cameraOffsetValue;
+            }
             // The target x and y coordinates should not be larger than the maximum or smaller than the minimum.
-            targetX = Mathf.Clamp(targetX, minXAndY.x, maxXAndY.x);
+            targetX = Mathf.Clamp(targetX + offset, minXAndY.x, maxXAndY.x);
             targetY = Mathf.Clamp(targetY, minXAndY.y, maxXAndY.y);
 
             // Set the camera's position to the target position with the same z component.
+            
             transform.position = new Vector3(targetX, targetY, transform.position.z);
         }
     }
