@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-        if (rBody.velocity.y == 0)
+        if (rBody.velocity.y < .5 && rBody.velocity.y > -.5)
         {
             jumping = false;
         }
