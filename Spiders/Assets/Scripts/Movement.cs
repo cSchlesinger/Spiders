@@ -20,12 +20,16 @@ public class Movement : MonoBehaviour
     private float lastJumpTime;
     private float jumpCoolDown = .2f;
     private float currentJumpTime;
-    	
+    private float lastTurnTime;
+    private float TurnCoolDown = .2f;
+    private float currentTurnTime;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
 	{
         lastJumpTime = 0;
+        lastTurnTime = 0;
+        
         jumpsRemaining = 3;
         rBody = gameObject.GetComponent<Rigidbody2D>();
     }
@@ -79,10 +83,14 @@ public class Movement : MonoBehaviour
     }
         private void CheckInput()
     {
-        //if (Input.GetKeyDown(KeyCode.W))
+        
         if (gameObject.tag == "Player")
         {
             //Is it moving or slowing down?
+            if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
+            {
+                currentTurnTime = Time.fixedTime;
+            }
             if (Input.GetKey(KeyCode.D))
             {
                 if (Input.GetKey(KeyCode.A) && !jumping)
@@ -131,9 +139,12 @@ public class Movement : MonoBehaviour
         }
 
         //transform.position = position;
-
+        if(currentTurnTime-lastTurnTime >= TurnCoolDown)
+        {
+           
+            lastTurnTime = currentTurnTime;
+        }
         position.x += velocity.x * speed * Time.deltaTime;
-
         transform.position = new Vector3(position.x, transform.position.y, 0);
     }
     private void OnTriggerEnter2D(Collider2D collision)
