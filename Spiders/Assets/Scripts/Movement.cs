@@ -9,19 +9,20 @@ public class Movement : MonoBehaviour
     private Rigidbody2D rBody;
     private Vector3 velocity = new Vector3(2.0f, 0.0f, 0.0f);
 	public float speed = 0.0f;
-	private float maxSpeed = 7.0f;
+	private float maxSpeed = 5.0f;
 	private float slowDown = .1f;
 	private float speedIncrement = 14f;
     private float timeSinceDirectionChange;
     public bool faceForward = true;
 	private Vector3 worldSize = new Vector3(10.0f, 10.0f, 0.0f);
-
+    public int jumpsRemaining;
 	private bool useSlowdown = false;
     	
 
 	// Use this for initialization
 	void Start ()
 	{
+        jumpsRemaining = 3;
         rBody = gameObject.GetComponent<Rigidbody2D>();
     }
 	
@@ -44,11 +45,29 @@ public class Movement : MonoBehaviour
     public void Jump()
     {
         //jump check
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
         {
-            rBody.AddRelativeForce(Vector2.up * (60000) * Time.deltaTime);
-            //jumping = true;
+            if(jumpsRemaining == 3)
+            {
+                rBody.AddForce(Vector2.up * (700) );
+                //jumping = true;
+                jumpsRemaining--;
+                return;
+            }
+            if(jumpsRemaining == 2)
+            {
+                rBody.AddForce(Vector2.up * (40000) * Time.deltaTime);
+                jumpsRemaining--;
+                return;
+            }
+            if(jumpsRemaining == 1)
+            {
+                rBody.AddForce(Vector2.up * (40000) * Time.deltaTime);
+                jumpsRemaining--;
+                return;
+            }
         }
+       
     }
         private void CheckInput()
     {
@@ -108,6 +127,13 @@ public class Movement : MonoBehaviour
         position.x += velocity.x * speed * Time.deltaTime;
 
         transform.position = new Vector3(position.x, transform.position.y, 0);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {       
+        if (collision.gameObject.CompareTag("platform"))
+        {
+            jumpsRemaining = 3;
+        }
     }
 
 }
