@@ -17,11 +17,15 @@ public class Movement : MonoBehaviour
 	private Vector3 worldSize = new Vector3(10.0f, 10.0f, 0.0f);
     public int jumpsRemaining;
 	private bool useSlowdown = false;
+    private float lastJumpTime;
+    private float jumpCoolDown = .2f;
+    private float currentJumpTime;
     	
 
 	// Use this for initialization
 	void Start ()
 	{
+        lastJumpTime = 0;
         jumpsRemaining = 3;
         rBody = gameObject.GetComponent<Rigidbody2D>();
     }
@@ -44,26 +48,30 @@ public class Movement : MonoBehaviour
 	}
     public void Jump()
     {
+        currentJumpTime = Time.fixedTime;
         //jump check
-        if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0 && currentJumpTime - lastJumpTime >= jumpCoolDown)
         {
             if(jumpsRemaining == 3)
             {
                 rBody.AddForce(Vector2.up * (700) );
                 //jumping = true;
                 jumpsRemaining--;
+                lastJumpTime = currentJumpTime;
                 return;
             }
             if(jumpsRemaining == 2)
             {
-                rBody.AddForce(Vector2.up * (40000) * Time.deltaTime);
+                rBody.AddForce(Vector2.up * (32000) * Time.deltaTime);
                 jumpsRemaining--;
+                lastJumpTime = currentJumpTime;
                 return;
             }
             if(jumpsRemaining == 1)
             {
-                rBody.AddForce(Vector2.up * (40000) * Time.deltaTime);
+                rBody.AddForce(Vector2.up * (32000) * Time.deltaTime);
                 jumpsRemaining--;
+                lastJumpTime = currentJumpTime;
                 return;
             }
         }
