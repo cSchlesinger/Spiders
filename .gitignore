@@ -33,5 +33,5 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Spiders/Library/
-Spiders/Library/metadata/
+
 Spiders/Temp/
