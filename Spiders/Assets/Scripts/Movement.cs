@@ -20,10 +20,7 @@ public class Movement : MonoBehaviour
     private float lastJumpTime;
     private float jumpCoolDown = .2f;
     private float currentJumpTime;
-    private float lastTurnTime;
-    private float TurnCoolDown = .2f;
-    private float currentTurnTime;
-
+   
     // Use this for initialization
     void Start ()
 	{
@@ -90,6 +87,10 @@ public class Movement : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
             {
                 currentTurnTime = Time.fixedTime;
+                speed = 0;
+                position.x += velocity.x * speed * Time.deltaTime;
+                transform.position = new Vector3(position.x, transform.position.y, 0);
+                return;
             }
             if (Input.GetKey(KeyCode.D))
             {
@@ -138,12 +139,7 @@ public class Movement : MonoBehaviour
 
         }
 
-        //transform.position = position;
-        if(currentTurnTime-lastTurnTime >= TurnCoolDown)
-        {
-           
-            lastTurnTime = currentTurnTime;
-        }
+        //transform.position = position;       
         position.x += velocity.x * speed * Time.deltaTime;
         transform.position = new Vector3(position.x, transform.position.y, 0);
     }
