@@ -18,7 +18,7 @@ public class Movement : MonoBehaviour
     public int jumpsRemaining;
 	private bool useSlowdown = false;
     private float lastJumpTime;
-    private float jumpCoolDown = .25f;
+    private float jumpCoolDown = .225f;
     private float currentJumpTime;
    
     // Use this for initialization
@@ -69,7 +69,7 @@ public class Movement : MonoBehaviour
             }
             if(jumpsRemaining == 1)
             {
-                rBody.AddForce(Vector2.up * (32000) * Time.deltaTime);
+                rBody.AddForce(Vector2.up * (37000) * Time.deltaTime);
                 jumpsRemaining--;
                 lastJumpTime = currentJumpTime;
                 return;
