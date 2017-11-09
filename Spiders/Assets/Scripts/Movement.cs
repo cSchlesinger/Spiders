@@ -18,15 +18,14 @@ public class Movement : MonoBehaviour
     public int jumpsRemaining;
 	private bool useSlowdown = false;
     private float lastJumpTime;
-    private float jumpCoolDown = .2f;
+    private float jumpCoolDown = .25f;
     private float currentJumpTime;
    
     // Use this for initialization
     void Start ()
 	{
         lastJumpTime = 0;
-        lastTurnTime = 0;
-        
+                
         jumpsRemaining = 3;
         rBody = gameObject.GetComponent<Rigidbody2D>();
     }
@@ -85,8 +84,7 @@ public class Movement : MonoBehaviour
         {
             //Is it moving or slowing down?
             if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
-            {
-                currentTurnTime = Time.fixedTime;
+            {                
                 speed = 0;
                 position.x += velocity.x * speed * Time.deltaTime;
                 transform.position = new Vector3(position.x, transform.position.y, 0);

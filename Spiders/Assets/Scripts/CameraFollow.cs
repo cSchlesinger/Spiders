@@ -58,18 +58,18 @@ namespace UnityStandardAssets._2D
             // By default the target x and y coordinates of the camera are it's current x and y coordinates.
             float targetX = transform.position.x;
             float targetY = transform.position.y;
-
+            if (moveBoy.faceForward)
+            {
+                m_Player = rightBoy;
+            }
+            else
+            {
+                m_Player = leftBoy;
+            }
             // If the player has moved beyond the x margin...
             if (CheckXMargin())
             {
-                if (moveBoy.faceForward)
-                {
-                    m_Player = rightBoy;
-                }
-                else
-                {
-                    m_Player=leftBoy;
-                }
+              
                 // ... the target x coordinate should be a Lerp between the camera's current x position and the player's current x position.
                 targetX = Mathf.Lerp(transform.position.x, m_Player.position.x, xSmooth*Time.deltaTime);
             }
